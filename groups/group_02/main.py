@@ -33,20 +33,37 @@ def main():
             execution = False
             
         elif decision == "1":
+
+            ## 1) Mostra o valor atual da confiança
             print(f"Nível de confiança atual: {confidence_level}")
-            
-            Atualizacao_confianca_str = input ("Digite o novo valor a ser atribuído à confiança: ")
-            Atualizacao_confianca_str = Atualizacao_confianca_str.strip()
-            Atualizacao_confianca_str = Atualizacao_confianca_str.replace(",",".")
 
-            Atualizacao_confianca_str = float(Atualizacao_confianca_str)
+            while True :
 
-            confidence_level = Atualizacao_confianca_str
+                ##2) aqui recebmos o novo valor em str pra fazer devidas correções para não quebrar o programa
+                Atualizacao_confianca_str = input ("Digite o novo valor a ser atribuído à confiança: ")
+                Atualizacao_confianca_str = Atualizacao_confianca_str.strip()
+                Atualizacao_confianca_str = Atualizacao_confianca_str.replace(",",".")
+
+                ## 3)O try protege o programa contra valores inválidos impedindo o sistema quebrar
+                try :
+                    Atualizacao_confianca = float(Atualizacao_confianca_str)
+                    confidence_level = Atualizacao_confianca
+                    
+                ## 4) Se o valor digitado pelo usuário der algum erro, ele cai no except e o laço é executado novamente pedindo um novo valor
+                except ValueError:
+                    print ("Você digitou um valor errado. Por favor,digite um valor válido (entre 0 e 1) e  não tente quebrar o programa!")
+                    continue
+                break
+
             print(f"Novo nível de confiança: {confidence_level}")
 
 
-            ## nao esquecer de proteger o codigo contra valores inválidos, tipo o ABC
+                ## NÃO ESQUECER DE CHECAR INTERVALO 0 - 1 
+            
+
+
         elif decision == "2":
+
             print("\n--- Analisar uma foto ---")
 
             # 1) Pede a pasta até ela ser válida
