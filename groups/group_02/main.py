@@ -5,6 +5,78 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "kit"))
 from black_box import *
 
+
+
+
+# ============================================================
+# FUNÇÃO ask_folder
+# Objetivo: pedir o nome de uma pasta e só aceitar quando ela for válida.
+# Devolve (return) o nome da pasta.
+# Usada nas opções 2 e 3 (e depois nas opções 4 a 7).
+# ============================================================
+def ask_folder():
+
+    # [0] mostra as pastas
+    show_folders()
+    # [1] Pede o nome da pasta. O .strip() tira espaços das pontas
+    #     (assim "  street " vira "street").
+    folder = input("Digite o nome da pasta (ex: street, animals, sports): ").strip()
+
+    # [2] Laço de validação: repete ENQUANTO a pasta for inválida.
+    #     Ela é inválida se QUALQUER uma das 3 condições for verdadeira (por isso o "or"):
+    #       - folder == ""                -> o usuário só apertou Enter
+    #       - not folder_exists(folder)   -> a pasta não existe em images/
+    #       - total_photos(folder) == 0   -> existe, mas não tem fotos (pega ".." e "kit")
+    #     A ordem importa: se a primeira for verdadeira, o Python nem testa as outras.
+    while folder == "" or not folder_exists(folder) or total_photos(folder) == 0:
+        print("Pasta inválida. Tente novamente.")
+        # [3] Pede de novo DENTRO do laço; sem isso ele repetiria para sempre.
+        folder = input("Digite o nome da pasta (ex: street, animals, sports): ").strip()
+
+    # [4] Chegou aqui = pasta válida. O "return" entrega o valor para quem chamou a função.
+    return folder
+
+
+
+
+
+# ============================================================
+# FUNÇÃO ask_photo
+# Objetivo: pedir pasta + número da foto (os dois validados).
+# Devolve (return) o CAMINHO da foto, ex.: "images/street/street_04.jpg".
+# Usada nas opções 2 e 3.
+# ============================================================
+def ask_photo():
+    # [1] Primeiro pede a pasta, já validada, usando a função do passo 1.
+    #     (uma função pode chamar outra função)
+    folder = ask_folder()
+
+    # [2] Guarda quantas fotos a pasta tem e mostra para o usuário.
+    total = total_photos(folder)
+    print(f"A pasta '{folder}' tem {total} fotos.")
+
+    # [3] number começa em 0 DE PROPÓSITO: 0 é inválido, então o while entra pelo menos uma vez.
+    number = 0
+
+    # [4] Repete ENQUANTO o número estiver fora do intervalo de 1 até o total.
+    while number < 1 or number > total:
+        typed = input(f"Escolha o número da foto (1 a {total}): ").strip()
+
+        # [5] int() dá ValueError se o texto não for inteiro (abc, 2.7, vazio).
+        #     Em vez de quebrar, o except coloca number = 0 (inválido) e o laço repete.
+        try:
+            number = int(typed)
+        except ValueError:
+            number = 0
+
+        # [6] Só mostra o erro se o número ficou inválido.
+        if number < 1 or number > total:
+            print(f"Número inválido. Digite um número inteiro de 1 a {total}.")
+
+    # [7] Pasta e número válidos: monta e devolve o caminho da foto.
+    return photo_name(folder, number)
+
+
 def main():
     print("PhotoCensus - Group 02")
     
@@ -12,8 +84,6 @@ def main():
     execution = True
     confidence_level = 0.5  # Valor padrão de exemplo
     
-    
-    show_folders()
 
     while execution:
         print("        Menu do PhotoCensus")
@@ -66,28 +136,11 @@ def main():
 
             print("\n--- Analisar uma foto ---")
 
-            # 1) Pede a pasta até ela ser válida
-            folder = input("Digite o nome da pasta (ex: street, animals, sports): ").strip()
-            while folder == "" or not folder_exists(folder) or total_photos(folder) == 0:
-                print("Pasta inválida. Tente novamente.")
-                folder = input("Digite o nome da pasta (ex: street, animals, sports): ").strip()
-
-            total = total_photos(folder)
-            print(f"A pasta '{folder}' tem {total} fotos.")
-
-            # 2) Pede o número da foto até ele ser válido
-            number = 0
-            while number < 1 or number > total:
-                typed = input(f"Escolha o número da foto (1 a {total}): ").strip()
-                try:
-                    number = int(typed)
-                except ValueError:
-                    number = 0
-                if number < 1 or number > total:
-                    print(f"Número inválido. Digite um número inteiro de 1 a {total}.")
+            # [PASSO 2] Pasta + número da foto agora vêm da função ask_photo(),
+            #           que devolve o CAMINHO da foto já validado.
+            photo = ask_photo()
 
             # 3) Busca os dados da foto
-            photo = photo_name(folder, number)
             total_objs = count_objects(photo, confidence_level)
 
             # 4) Mostra o resultado
@@ -104,30 +157,27 @@ def main():
             
 
         elif decision == "3":
-            
-            caminho = input ("Digite o caminho das fotos:")
-            classe = input ("Qual classe será analisada:  ")
-            
-            nova_atualizacao_da_confianca = input (f"Deseja alterar o nível de confiança? atualmente o nǘel de confiança é: {confidence_level}. digite Y para alterar e N para manter o nível atual")
-            nova_atualizacao_da_confianca = nova_atualizacao_da_confianca.lower()
+            print ("\n--- Contar uma classe na foto ---")
 
-            if nova_atualizacao_da_confianca == "y":
-                confidence_level_update = float(input("Escolha o novo nível de confiança: "))
-                confidence_level = confidence_level_update
-                print(f"Novo nível de confiança: {confidence_level}")
+            photo = ask_photo()
 
-            elif nova_atualizacao_da_confianca == 'n':
-                pass
+            # [2] Mostra as classes que o modelo reconhece (a função já imprime sozinha)
+            show_classes()
 
-            quantidade = count_class(caminho,classe,confidence_level)
-            
-            print (f"Foi encontrado: {quantidade} resultados para a sua pesquisa.")
+            # [3] Pede a classe. .strip() tira espaços e .lower() deixa minúsculo
+            classe = input("Diga a classe: ").strip().lower()
 
+            # [4] Não aceita vazio: repete enquanto o usuário não digitar nada
+            while classe == "":
+                print("Você não digitou nada. Tente novamente.")
+                classe = input("Diga a classe: ").strip().lower()
 
+            # [5] Mostra a classe escolhida, entre colchetes, para conferir
+            print(f"Classe escolhida: [{classe}]")
 
+            amount = count_class(photo,classe,confidence_level)
 
-
-
+            print(f"Objetos da classe '{classe}' (confiança >= {confidence_level}): {amount}")
 
 
 
