@@ -34,13 +34,56 @@ def main():
             
         elif decision == "1":
             print(f"Nível de confiança atual: {confidence_level}")
-            confidence_level_update = float(input("Escolha o novo nível de confiança: "))
-            confidence_level = confidence_level_update
+            
+            Atualizacao_confianca_str = input ("Digite o novo valor a ser atribuído à confiança: ")
+            Atualizacao_confianca_str = Atualizacao_confianca_str.strip()
+            Atualizacao_confianca_str = Atualizacao_confianca_str.replace(",",".")
+
+            Atualizacao_confianca_str = float(Atualizacao_confianca_str)
+
+            confidence_level = Atualizacao_confianca_str
             print(f"Novo nível de confiança: {confidence_level}")
 
-        elif decision == "2":
 
-            pass
+            ## nao esquecer de proteger o codigo contra valores inválidos, tipo o ABC
+        elif decision == "2":
+            print("\n--- Analisar uma foto ---")
+
+            # 1) Pede a pasta até ela ser válida
+            folder = input("Digite o nome da pasta (ex: street, animals, sports): ").strip()
+            while folder == "" or not folder_exists(folder) or total_photos(folder) == 0:
+                print("Pasta inválida. Tente novamente.")
+                folder = input("Digite o nome da pasta (ex: street, animals, sports): ").strip()
+
+            total = total_photos(folder)
+            print(f"A pasta '{folder}' tem {total} fotos.")
+
+            # 2) Pede o número da foto até ele ser válido
+            number = 0
+            while number < 1 or number > total:
+                typed = input(f"Escolha o número da foto (1 a {total}): ").strip()
+                try:
+                    number = int(typed)
+                except ValueError:
+                    number = 0
+                if number < 1 or number > total:
+                    print(f"Número inválido. Digite um número inteiro de 1 a {total}.")
+
+            # 3) Busca os dados da foto
+            photo = photo_name(folder, number)
+            total_objs = count_objects(photo, confidence_level)
+
+            # 4) Mostra o resultado
+            print(f"\nFoto: {photo}")
+            print(f"Objetos detectados (confiança >= {confidence_level}): {total_objs}")
+            if total_objs > 0:
+                main_obj = main_object(photo)
+                best_conf = max_confidence(photo)
+                print(f"Objeto principal: {main_obj}")
+                print(f"Maior confiança: {best_conf * 100:.0f}%")
+            else:
+                print("Nenhum objeto com essa confiança mínima.")
+            print()
             
 
         elif decision == "3":
