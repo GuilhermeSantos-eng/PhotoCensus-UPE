@@ -40,34 +40,28 @@ def main():
 
         elif decision == "2":
 
-            photo_path = input("Digite o nome ou caminho da foto (ex: street_01.jpg): ")
-            try:
-                deteccoes = detect(photo_path)
-                print(f"\nResultados para '{photo_path}':")
-                
-                encontrou = False
-                for nome, conf in deteccoes:
-                    if conf >= confidence_level:
-                        print(f"  - {nome} (confiança: {conf})")
-                        encontrou = True
-                        
-                if not encontrou:
-                    print("  Nenhum objeto encontrado com a confiança mínima configurada.")
-            except Exception as e:
-                print(f"Erro ao carregar a foto: {e}")
-
-            try:
-                detections = detect(photo_path)
-                print (f'Detecção de {photo_path}:')
-
-        elif decision3 == "3":
+            pass
             
-            caminho = imput ("Digite o caminho das fotos:")
+
+        elif decision == "3":
+            
+            caminho = input ("Digite o caminho das fotos:")
             classe = input ("Qual classe será analisada:  ")
             
             nova_atualizacao_da_confianca = input (f"Deseja alterar o nível de confiança? atualmente o nǘel de confiança é: {confidence_level}. digite Y para alterar e N para manter o nível atual")
+            nova_atualizacao_da_confianca = nova_atualizacao_da_confianca.lower()
 
+            if nova_atualizacao_da_confianca == "y":
+                confidence_level_update = float(input("Escolha o novo nível de confiança: "))
+                confidence_level = confidence_level_update
+                print(f"Novo nível de confiança: {confidence_level}")
 
+            elif nova_atualizacao_da_confianca == 'n':
+                pass
+
+            quantidade = count_class(caminho,classe,confidence_level)
+            
+            print (f"Foi encontrado: {quantidade} resultados para a sua pesquisa.")
 
 
 
