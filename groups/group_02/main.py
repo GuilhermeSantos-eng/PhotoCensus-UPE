@@ -149,7 +149,7 @@ def main():
 
             while True :
 
-                ##2) aqui recebmos o novo valor em str pra fazer devidas correções para não quebrar o programa
+                ##2) aqui recebemos o novo valor em str pra fazer devidas correções para não quebrar o programa
                 Atualizacao_confianca_str = input ("Digite o novo valor a ser atribuído à confiança: ")
                 Atualizacao_confianca_str = Atualizacao_confianca_str.strip()
                 Atualizacao_confianca_str = Atualizacao_confianca_str.replace(",",".")
@@ -164,23 +164,19 @@ def main():
                     print ("Você digitou um valor errado. Por favor,digite um valor válido (entre 0 e 1) e  não tente quebrar o programa!")
                     continue
                 
+                ## 5) Se virou número, só aceita se estiver entre 0 e 1. Escrito do jeito "positivo" para também rejeitar nan e inf
                 if 0 <= Atualizacao_confianca <= 1:
                     print ("Valor aceito!")
                     confidence_level = Atualizacao_confianca
                     break
 
-                
+                ## 6) Se chegou aqui, o número estava fora do intervalo: avisa, e o laço volta a pedir sozinho
                 print ("Valor inválido, escolha um valor no intervalo de 0 à 1. Por favor não tente quebrar o código!")
 
 
 
-
             print(f"Novo nível de confiança: {confidence_level}")
-
-
-                ## NÃO ESQUECER DE CHECAR INTERVALO 0 - 1 
             
-
 
         elif decision == "2":
 
