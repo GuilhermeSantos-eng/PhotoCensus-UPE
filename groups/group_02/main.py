@@ -157,13 +157,23 @@ def main():
                 ## 3)O try protege o programa contra valores inválidos impedindo o sistema quebrar
                 try :
                     Atualizacao_confianca = float(Atualizacao_confianca_str)
-                    confidence_level = Atualizacao_confianca
+                    
                     
                 ## 4) Se o valor digitado pelo usuário der algum erro, ele cai no except e o laço é executado novamente pedindo um novo valor
                 except ValueError:
                     print ("Você digitou um valor errado. Por favor,digite um valor válido (entre 0 e 1) e  não tente quebrar o programa!")
                     continue
-                break
+                
+                if 0 <= Atualizacao_confianca <= 1:
+                    print ("Valor aceito!")
+                    confidence_level = Atualizacao_confianca
+                    break
+
+                
+                print ("Valor inválido, escolha um valor no intervalo de 0 à 1. Por favor não tente quebrar o código!")
+
+
+
 
             print(f"Novo nível de confiança: {confidence_level}")
 
