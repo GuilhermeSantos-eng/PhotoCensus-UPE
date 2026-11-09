@@ -77,6 +77,46 @@ def ask_photo():
     return photo_name(folder, number)
 
 
+
+
+
+
+
+
+
+
+
+def relatorio_da_pasta(confianca):
+    """Opção 4: uma linha por foto, total geral, média e fotos vazias."""
+    # ask_folder() já rejeita pasta inválida e pasta sem fotos
+    pasta = ask_folder()
+    total_fotos = total_photos(pasta)
+
+    total_objetos = 0    # acumulador: soma dos objetos de todas as fotos
+    fotos_vazias = 0     # contador: fotos com 0 objetos
+
+    # for percorre todas as fotos; range(1, total + 1) porque as
+    # fotos começam em 1 e o range para antes do último número
+    for numero in range(1, total_fotos + 1):
+        foto = photo_name(pasta, numero)
+        quantidade = count_objects(foto, confianca)
+
+        # Uma linha por foto com a quantidade de objetos
+        print(f"Foto {numero} | {foto} | {quantidade} objeto(s)")
+
+        total_objetos = total_objetos + quantidade   # acumula o total
+        if quantidade == 0:
+            fotos_vazias = fotos_vazias + 1          # conta foto vazia
+
+    # total_fotos nunca é 0 aqui, pois ask_folder() rejeita pasta sem fotos
+    media = total_objetos / total_fotos
+
+    # Resumo final do relatório
+    print("\nTotal geral de objetos:", total_objetos)
+    print(f"Média de objetos por foto: {media:.2f}")
+    print("Fotos sem nenhum objeto:", fotos_vazias)
+
+
 def main():
     print("PhotoCensus - Group 02")
     
@@ -183,7 +223,8 @@ def main():
 
 
         elif decision == "4":
-            pass
+            print("\n--- Relatório da pasta ---")
+            relatorio_da_pasta(confidence_level)
 
         elif decision == "5":
             pass
