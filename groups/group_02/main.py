@@ -280,10 +280,10 @@ def main():
             pass
 
         elif decision == "7":
-            pass
+            print ("opcao 7")
 
         else:
             print("Escolha incorreta. Escolha uma opção válida\n")
-
+##luana consegui logar  FELICIDADE
 if __name__ == "__main__":
     main()
