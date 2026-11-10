@@ -117,6 +117,47 @@ def relatorio_da_pasta(confianca):
     print("Fotos sem nenhum objeto:", fotos_vazias)
 
 
+
+def foto_mais_cheia_e_mais_vazia(confianca):
+    """Opção 5: indica a foto com mais objetos e a foto com menos objetos."""
+    # ask_folder() já rejeita pasta inválida e pasta sem fotos
+    pasta = ask_folder()
+    total_fotos = total_photos(pasta)
+
+    # Variáveis de apoio. max() e min() são PROIBIDOS no Módulo 1,
+    # então guardamos "o melhor até agora" e comparamos com if dentro do laço.
+    maior_quantidade = 0     # maior número de objetos visto até agora
+    foto_mais_cheia = ""     # caminho da foto que tem esse maior número
+    menor_quantidade = 0     # menor número de objetos visto até agora
+    foto_mais_vazia = ""     # caminho da foto que tem esse menor número
+
+    # for percorre todas as fotos; as fotos começam em 1
+    for numero in range(1, total_fotos + 1):
+        foto = photo_name(pasta, numero)
+        quantidade = count_objects(foto, confianca)
+
+        if numero == 1:
+            # [1] Na primeira foto não há com quem comparar:
+            #     ela é ao mesmo tempo a maior e a menor até agora.
+            maior_quantidade = quantidade
+            foto_mais_cheia = foto
+            menor_quantidade = quantidade
+            foto_mais_vazia = foto
+        else:
+            # [2] Nas próximas, só troca se achar uma foto MELHOR.
+            #     Usamos > e < (sem o "=") para, em caso de empate,
+            #     valer a primeira foto encontrada.
+            if quantidade > maior_quantidade:
+                maior_quantidade = quantidade
+                foto_mais_cheia = foto
+            if quantidade < menor_quantidade:
+                menor_quantidade = quantidade
+                foto_mais_vazia = foto
+
+    # [3] Terminado o laço, mostra o resultado
+    print(f"\nFoto mais cheia: {foto_mais_cheia} ({maior_quantidade} objetos)")
+    print(f"Foto mais vazia: {foto_mais_vazia} ({menor_quantidade} objetos)")
+
 def main():
     print("PhotoCensus - Group 02")
     
@@ -143,6 +184,8 @@ def main():
             execution = False
             
         elif decision == "1":
+
+            print("\n--- Configurar confiança mínima ---")
 
             ## 1) Mostra o valor atual da confiança
             print(f"Nível de confiança atual: {confidence_level}")
@@ -225,15 +268,13 @@ def main():
 
             print(f"Objetos da classe '{classe}' (confiança >= {confidence_level}): {amount}")
 
-
-
-
         elif decision == "4":
             print("\n--- Relatório da pasta ---")
             relatorio_da_pasta(confidence_level)
 
         elif decision == "5":
-            pass
+            print("\n--- Foto mais cheia e Foto mais vazia ---")
+            foto_mais_cheia_e_mais_vazia(confidence_level)
 
         elif decision == "6":
             pass
