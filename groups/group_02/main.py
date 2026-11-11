@@ -322,6 +322,7 @@ def main():
         elif decision == "7":
             print ("opcao 7")
             print ("Login de Luana")
+            print ("")
         else:
             print("Escolha incorreta. Escolha uma opção válida\n")
 
