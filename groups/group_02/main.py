@@ -321,7 +321,7 @@ def main():
                 print("Nenhum encontrado. Confira se a classe está na lista acima.")
         elif decision == "7":
             print ("opcao 7")
-
+            print ("Login de Luana")
         else:
             print("Escolha incorreta. Escolha uma opção válida\n")
 
