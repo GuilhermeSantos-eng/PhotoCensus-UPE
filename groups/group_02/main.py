@@ -11,8 +11,6 @@ from black_box import *
 # ============================================================
 # FUNÇÃO ask_folder
 # Objetivo: pedir o nome de uma pasta e só aceitar quando ela for válida.
-# Devolve (return) o nome da pasta.
-# Usada nas opções 2 e 3 (e depois nas opções 4 a 7).
 # ============================================================
 def ask_folder():
 
@@ -43,8 +41,6 @@ def ask_folder():
 # ============================================================
 # FUNÇÃO ask_photo
 # Objetivo: pedir pasta + número da foto (os dois validados).
-# Devolve (return) o CAMINHO da foto, ex.: "images/street/street_04.jpg".
-# Usada nas opções 2 e 3.
 # ============================================================
 def ask_photo():
     # [1] Primeiro pede a pasta, já validada, usando a função do passo 1.
@@ -86,77 +82,14 @@ def ask_photo():
 
 
 
-def relatorio_da_pasta(confianca):
-    """Opção 4: uma linha por foto, total geral, média e fotos vazias."""
-    # ask_folder() já rejeita pasta inválida e pasta sem fotos
-    pasta = ask_folder()
-    total_fotos = total_photos(pasta)
-
-    total_objetos = 0    # acumulador: soma dos objetos de todas as fotos
-    fotos_vazias = 0     # contador: fotos com 0 objetos
-
-    # for percorre todas as fotos; range(1, total + 1) porque as
-    # fotos começam em 1 e o range para antes do último número
-    for numero in range(1, total_fotos + 1):
-        foto = photo_name(pasta, numero)
-        quantidade = count_objects(foto, confianca)
-
-        # Uma linha por foto com a quantidade de objetos
-        print(f"Foto {numero} | {foto} | {quantidade} objeto(s)")
-
-        total_objetos = total_objetos + quantidade   # acumula o total
-        if quantidade == 0:
-            fotos_vazias = fotos_vazias + 1          # conta foto vazia
-
-    # total_fotos nunca é 0 aqui, pois ask_folder() rejeita pasta sem fotos
-    media = total_objetos / total_fotos
-
-    # Resumo final do relatório
-    print("\nTotal geral de objetos:", total_objetos)
-    print(f"Média de objetos por foto: {media:.2f}")
-    print("Fotos sem nenhum objeto:", fotos_vazias)
 
 
 
-def foto_mais_cheia_e_mais_vazia(confianca):
-    """Opção 5: indica a foto com mais objetos e a foto com menos objetos."""
-    # ask_folder() já rejeita pasta inválida e pasta sem fotos
-    pasta = ask_folder()
-    total_fotos = total_photos(pasta)
 
-    # Variáveis de apoio. max() e min() são PROIBIDOS no Módulo 1,
-    # então guardamos "o melhor até agora" e comparamos com if dentro do laço.
-    maior_quantidade = 0     # maior número de objetos visto até agora
-    foto_mais_cheia = ""     # caminho da foto que tem esse maior número
-    menor_quantidade = 0     # menor número de objetos visto até agora
-    foto_mais_vazia = ""     # caminho da foto que tem esse menor número
 
-    # for percorre todas as fotos; as fotos começam em 1
-    for numero in range(1, total_fotos + 1):
-        foto = photo_name(pasta, numero)
-        quantidade = count_objects(foto, confianca)
 
-        if numero == 1:
-            # [1] Na primeira foto não há com quem comparar:
-            #     ela é ao mesmo tempo a maior e a menor até agora.
-            maior_quantidade = quantidade
-            foto_mais_cheia = foto
-            menor_quantidade = quantidade
-            foto_mais_vazia = foto
-        else:
-            # [2] Nas próximas, só troca se achar uma foto MELHOR.
-            #     Usamos > e < (sem o "=") para, em caso de empate,
-            #     valer a primeira foto encontrada.
-            if quantidade > maior_quantidade:
-                maior_quantidade = quantidade
-                foto_mais_cheia = foto
-            if quantidade < menor_quantidade:
-                menor_quantidade = quantidade
-                foto_mais_vazia = foto
 
-    # [3] Terminado o laço, mostra o resultado
-    print(f"\nFoto mais cheia: {foto_mais_cheia} ({maior_quantidade} objetos)")
-    print(f"Foto mais vazia: {foto_mais_vazia} ({menor_quantidade} objetos)")
+
 
 def main():
     print("PhotoCensus - Group 02")
@@ -204,7 +137,7 @@ def main():
                     
                 ## 4) Se o valor digitado pelo usuário der algum erro, ele cai no except e o laço é executado novamente pedindo um novo valor
                 except ValueError:
-                    print ("Você digitou um valor errado. Por favor,digite um valor válido (entre 0 e 1) e  não tente quebrar o programa!")
+                    print ("Você digitou um valor errado. Por favor, digite um valor válido (entre 0 e 1) e não tente quebrar o programa!")
                     continue
                 
                 ## 5) Se virou número, só aceita se estiver entre 0 e 1. Escrito do jeito "positivo" para também rejeitar nan e inf
@@ -214,10 +147,10 @@ def main():
                     break
 
                 ## 6) Se chegou aqui, o número estava fora do intervalo: avisa, e o laço volta a pedir sozinho
-                print ("Valor inválido, escolha um valor no intervalo de 0 à 1. Por favor não tente quebrar o código!")
+                print ("Valor inválido, escolha um valor no intervalo de 0 a 1. Por favor não tente quebrar o código!")
 
 
-
+            ## 7) Mostra o valor que ficou configurado
             print(f"Novo nível de confiança: {confidence_level}")
             
 
@@ -225,14 +158,14 @@ def main():
 
             print("\n--- Analisar uma foto ---")
 
-            # [PASSO 2] Pasta + número da foto agora vêm da função ask_photo(),
-            #           que devolve o CAMINHO da foto já validado.
+            
+            
             photo = ask_photo()
 
-            # 3) Busca os dados da foto
+            # 2) Busca os dados da foto
             total_objs = count_objects(photo, confidence_level)
 
-            # 4) Mostra o resultado
+            # 3) Mostra o resultado
             print(f"\nFoto: {photo}")
             print(f"Objetos detectados (confiança >= {confidence_level}): {total_objs}")
             if total_objs > 0:
@@ -247,7 +180,7 @@ def main():
 
         elif decision == "3":
             print ("\n--- Contar uma classe na foto ---")
-
+            # [1] Pergunta a foto
             photo = ask_photo()
 
             # [2] Mostra as classes que o modelo reconhece (a função já imprime sozinha)
@@ -270,17 +203,124 @@ def main():
 
         elif decision == "4":
             print("\n--- Relatório da pasta ---")
-            relatorio_da_pasta(confidence_level)
+            
+            # ask_folder() já rejeita pasta inválida e pasta sem fotos
+            pasta = ask_folder()
+            total_fotos = total_photos(pasta)
+
+            total_objetos = 0    # acumulador: soma dos objetos de todas as fotos
+            fotos_vazias = 0     # contador: fotos com 0 objetos
+
+            # for percorre todas as fotos; range(1, total + 1) porque as
+            # fotos começam em 1 e o range para antes do último número
+            for numero in range(1, total_fotos + 1):
+                foto = photo_name(pasta, numero)
+                quantidade = count_objects(foto, confidence_level)
+
+                # Uma linha por foto com a quantidade de objetos
+                print(f"Foto {numero} | {foto} | {quantidade} objeto(s)")
+
+                total_objetos = total_objetos + quantidade   # acumula o total
+                if quantidade == 0:
+                    fotos_vazias = fotos_vazias + 1          # conta foto vazia
+
+            # total_fotos nunca é 0 aqui, pois ask_folder() rejeita pasta sem fotos
+            media = total_objetos / total_fotos
+
+            # Resumo final do relatório
+            print("\nTotal geral de objetos:", total_objetos)
+            print(f"Média de objetos por foto: {media:.2f}")
+            print("Fotos sem nenhum objeto:", fotos_vazias)
+
 
         elif decision == "5":
             print("\n--- Foto mais cheia e Foto mais vazia ---")
-            foto_mais_cheia_e_mais_vazia(confidence_level)
+            
+                    # ask_folder() já rejeita pasta inválida e pasta sem fotos
+            pasta = ask_folder()
+            total_fotos = total_photos(pasta)
+
+            # Variáveis de apoio. max() e min() são PROIBIDOS no Módulo 1,
+            # então guardamos "o melhor até agora" e comparamos com if dentro do laço.
+            maior_quantidade = 0     # maior número de objetos visto até agora
+            foto_mais_cheia = ""     # caminho da foto que tem esse maior número
+            menor_quantidade = 0     # menor número de objetos visto até agora
+            foto_mais_vazia = ""     # caminho da foto que tem esse menor número
+
+            # for percorre todas as fotos; as fotos começam em 1
+            for numero in range(1, total_fotos + 1):
+                foto = photo_name(pasta, numero)
+                quantidade = count_objects(foto, confidence_level)
+
+                if numero == 1:
+                    # [1] Na primeira foto não há com quem comparar:
+                    #     ela é ao mesmo tempo a maior e a menor até agora.
+                    maior_quantidade = quantidade
+                    foto_mais_cheia = foto
+                    menor_quantidade = quantidade
+                    foto_mais_vazia = foto
+                else:
+                    # [2] Nas próximas, só troca se achar uma foto MELHOR.
+                    #     Usamos > e < (sem o "=") para, em caso de empate,
+                    #     valer a primeira foto encontrada.
+                    if quantidade > maior_quantidade:
+                        maior_quantidade = quantidade
+                        foto_mais_cheia = foto
+                    if quantidade < menor_quantidade:
+                        menor_quantidade = quantidade
+                        foto_mais_vazia = foto
+
+            # [3] Terminado o laço, mostra o resultado
+            print(f"\nFoto mais cheia: {foto_mais_cheia} ({maior_quantidade} objetos)")
+            print(f"Foto mais vazia: {foto_mais_vazia} ({menor_quantidade} objetos)")
 
         elif decision == "6":
-            pass
+            print("\n--- Procurar uma classe na pasta ---")
+            
+                    # [1] ask_folder() já rejeita pasta inválida e pasta sem fotos
+            pasta = ask_folder()
+            total_fotos = total_photos(pasta)
 
+            # [2] Mostra as classes que o modelo reconhece (a função já imprime sozinha)
+            show_classes()
+
+            # [3] Pede a classe. .strip() tira espaços e .lower() deixa minúsculo
+            classe = input("Diga a classe (ex.: car, person): ").strip().lower()
+
+            # [4] Não aceita vazio: repete enquanto o usuário não digitar nada
+            while classe == "":
+                print("Você não digitou nada. Tente novamente.")
+                classe = input("Diga a classe (ex.: car, person): ").strip().lower()
+
+            # [5] Variáveis de apoio (sum() é proibido, então contamos à mão)
+            fotos_com_classe = 0    # contador: em quantas fotos a classe aparece
+            total_encontrado = 0    # acumulador: quantidade total de objetos da classe
+
+            # [6] for percorre todas as fotos; as fotos começam em 1
+            for numero in range(1, total_fotos + 1):
+                foto = photo_name(pasta, numero)
+                quantidade = count_class(foto, classe, confidence_level)
+
+                # Só conta a foto se a classe apareceu pelo menos uma vez nela
+                if quantidade > 0:
+                    fotos_com_classe = fotos_com_classe + 1
+                    total_encontrado = total_encontrado + quantidade
+
+            # [7] Porcentagem de fotos da pasta em que a classe aparece
+            #     (total_fotos nunca é 0, pois ask_folder() rejeita pasta sem fotos)
+            porcentagem = fotos_com_classe / total_fotos * 100
+
+            # [8] Mostra o resultado
+            print(f"\nClasse: '{classe}' | pasta: '{pasta}' | confiança >= {confidence_level}")
+            print(f"Aparece em {fotos_com_classe} de {total_fotos} fotos.")
+            print(f"Quantidade total encontrada: {total_encontrado}")
+            print(f"Porcentagem de fotos com a classe: {porcentagem:.1f}%")
+            if total_encontrado == 0:
+                # count_class devolve 0 tanto para "não tem na pasta" quanto para
+                # classe digitada errada; por isso lembramos de conferir a lista
+                print("Nenhum encontrado. Confira se a classe está na lista acima.")
         elif decision == "7":
-            pass
+            print ("opcao 7")
 
         else:
             print("Escolha incorreta. Escolha uma opção válida\n")
