@@ -99,7 +99,7 @@ def main():
     confidence_level = 0.5  # Valor padrão de exemplo
     
 
-    while execution:
+    while execution:    
         print("        Menu do PhotoCensus")
         print("""
         1 --> Configurar confiança mínima
@@ -319,8 +319,28 @@ def main():
                 # count_class devolve 0 tanto para "não tem na pasta" quanto para
                 # classe digitada errada; por isso lembramos de conferir a lista
                 print("Nenhum encontrado. Confira se a classe está na lista acima.")
+            
         elif decision == "7":
-            print ("opcao 7")
+            print("\n--- Gráfico de barras em texto ---")
+
+            # [1] Pede a pasta já validada e descobre o total de fotos
+            pasta = ask_folder()
+            total_fotos = total_photos(pasta)
+
+            print(f"\nGráfico de objetos por foto na pasta '{pasta}' (confiança >= {confidence_level}):\n")
+
+            # [2] Percorre todas as fotos da pasta (de 1 até total_fotos)
+            for numero in range(1, total_fotos + 1):
+                foto = photo_name(pasta, numero)
+                quantidade = count_objects(foto, confidence_level)
+
+                # [3] Constrói a barra repetindo o caractere '#' de acordo com a quantidade
+                #     (Se o seu professor exigir laço em vez de multiplicação de string,
+                #      veja a alternativa logo abaixo)
+                barra = "#" * quantidade
+
+                # [4] Exibe o número da foto, a barra e a quantidade entre parênteses
+                print(f"Foto {numero:2d} | {barra} ({quantidade})")
             
         else:
             print("Escolha incorreta. Escolha uma opção válida\n")
