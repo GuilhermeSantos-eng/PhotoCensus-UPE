@@ -73,24 +73,6 @@ def ask_photo():
     return photo_name(folder, number)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def main():
     print("PhotoCensus - Group 02")
     
@@ -329,21 +311,29 @@ def main():
 
             print(f"\nGráfico de objetos por foto na pasta '{pasta}' (confiança >= {confidence_level}):\n")
 
-            # [2] Percorre todas as fotos da pasta (de 1 até total_fotos)
+            # [2] LAÇO DE FORA: percorre as fotos (uma linha do gráfico por foto)
             for numero in range(1, total_fotos + 1):
                 foto = photo_name(pasta, numero)
                 quantidade = count_objects(foto, confidence_level)
 
-                # [3] Constrói a barra repetindo o caractere '#' de acordo com a quantidade
-                #     (Se o seu professor exigir laço em vez de multiplicação de string,
-                #      veja a alternativa logo abaixo)
-                barra = "#" * quantidade
+                # [3] Começo da linha: nome curto da foto (ex.: "street_04 | ").
+                #     {numero:02d} completa com zero à esquerda (4 vira 04).
+                #     end="" faz o print NÃO pular de linha, para as barras continuarem nela.
+                print(f"{pasta}_{numero:02d} | ", end="")
 
-                # [4] Exibe o número da foto, a barra e a quantidade entre parênteses
-                print(f"Foto {numero:2d} | {barra} ({quantidade})")
-            
+                # [4] LAÇO DE DENTRO (aninhado): roda uma vez para cada objeto da foto
+                #     e imprime um "#" por vez, tudo na mesma linha.
+                #     Se quantidade for 0, este laço não roda nenhuma vez (barra vazia).
+                for objeto in range(quantidade):
+                    print("#", end="")
+
+                # [5] Fecha a linha: mostra a quantidade e agora SIM pula de linha
+                print(f" ({quantidade})")
+
         else:
             print("Escolha incorreta. Escolha uma opção válida\n")
+
+
 
 if __name__ == "__main__":
     main()
