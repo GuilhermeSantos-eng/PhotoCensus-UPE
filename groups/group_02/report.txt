@@ -1,0 +1,56 @@
+PhotoCensus - Relatório do acervo
+Confiança mínima: 0.8
+
+INVENTÁRIO
+giraffe: 4
+zebra: 4
+horse: 1
+person: 15
+elephant: 1
+refrigerator: 2
+oven: 2
+microwave: 1
+couch: 6
+chair: 3
+tv: 6
+remote: 1
+laptop: 6
+keyboard: 4
+mouse: 2
+frisbee: 1
+sports ball: 2
+tennis racket: 1
+surfboard: 1
+skateboard: 1
+motorcycle: 2
+bus: 3
+stop sign: 1
+truck: 1
+car: 1
+
+RANKING
+1. person - 15
+2. couch - 6
+3. tv - 6
+4. laptop - 6
+5. giraffe - 4
+6. zebra - 4
+7. keyboard - 4
+8. chair - 3
+9. bus - 3
+10. refrigerator - 2
+11. oven - 2
+12. mouse - 2
+13. sports ball - 2
+14. motorcycle - 2
+15. horse - 1
+16. elephant - 1
+17. microwave - 1
+18. remote - 1
+19. frisbee - 1
+20. tennis racket - 1
+21. surfboard - 1
+22. skateboard - 1
+23. stop sign - 1
+24. truck - 1
+25. car - 1
